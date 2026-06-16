@@ -289,16 +289,8 @@ function serveStatic(req, res, url) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${port}`);
   try {
-    if (url.pathname === "/api/register" && req.method === "POST") {
-      await handleRegister(req, res);
-      return;
-    }
-    if (url.pathname === "/api/login" && req.method === "POST") {
-      await handleLogin(req, res);
-      return;
-    }
-    if (url.pathname.startsWith("/api/admin/users")) {
-      await handleAdminUsers(req, res, url);
+    if (url.pathname.startsWith("/api/")) {
+      sendJson(res, 503, { error: "Backend đã bị vô hiệu hóa." });
       return;
     }
     serveStatic(req, res, url);

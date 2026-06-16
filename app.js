@@ -507,7 +507,13 @@ function escapeAttr(value) {
     .replace(/>/g, "&gt;");
 }
 
+const BACKEND_DISABLED = true;
+
 async function apiRequest(path, options = {}) {
+  if (BACKEND_DISABLED && path.startsWith("/api/")) {
+    throw new Error("Backend đã bị vô hiệu hóa.");
+  }
+
   const response = await fetch(path, {
     ...options,
     headers: {
@@ -642,6 +648,8 @@ function renderChrome() {
   const mobileRegisterBtn = $("#mobileRegisterBtn");
   const navAdmin = $("#navAdminBtn");
   const mobileAdmin = $("#mobileAdminBtn");
+  const sidebarLoginBtn = $("#sidebarLoginBtn");
+  const sidebarRegisterBtn = $("#sidebarRegisterBtn");
   const canViewAdmin = isAdminUser();
   if (navAdmin) navAdmin.classList.toggle("hidden", !canViewAdmin);
   if (mobileAdmin) mobileAdmin.classList.toggle("hidden", !canViewAdmin);
@@ -660,6 +668,31 @@ function renderChrome() {
     if (registerBtn) registerBtn.textContent = "Đăng ký";
     if (mobileLoginBtn) mobileLoginBtn.textContent = "Đăng nhập";
     if (mobileRegisterBtn) mobileRegisterBtn.textContent = "Đăng ký";
+  }
+
+  if (loginBtn) {
+    loginBtn.disabled = true;
+    loginBtn.title = "Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa";
+  }
+  if (registerBtn) {
+    registerBtn.disabled = true;
+    registerBtn.title = "Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa";
+  }
+  if (mobileLoginBtn) {
+    mobileLoginBtn.disabled = true;
+    mobileLoginBtn.title = "Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa";
+  }
+  if (mobileRegisterBtn) {
+    mobileRegisterBtn.disabled = true;
+    mobileRegisterBtn.title = "Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa";
+  }
+  if (sidebarLoginBtn) {
+    sidebarLoginBtn.disabled = true;
+    sidebarLoginBtn.title = "Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa";
+  }
+  if (sidebarRegisterBtn) {
+    sidebarRegisterBtn.disabled = true;
+    sidebarRegisterBtn.title = "Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa";
   }
 
   const langToggle = $("#langToggle");
@@ -816,8 +849,8 @@ function renderRoadmap() {
             <div class="cta-icon">✍️</div>
             <p>Hãy đăng ký / đăng nhập để lưu tiến độ học tập của bạn.</p>
           </div>
-          <button class="btn-sidebar-login" id="sidebarLoginBtn" type="button">Đăng nhập</button>
-          <button class="btn-sidebar-register" id="sidebarRegisterBtn" type="button">Đăng ký</button>
+          <button class="btn-sidebar-login" id="sidebarLoginBtn" type="button" disabled title="Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa">Đăng nhập</button>
+          <button class="btn-sidebar-register" id="sidebarRegisterBtn" type="button" disabled title="Đăng nhập/Đăng ký tạm thời bị vô hiệu hóa">Đăng ký</button>
         </div>
         
         <!-- Bottom illustration -->
@@ -2180,52 +2213,20 @@ function bindEvents() {
     }
     const mobileLoginBtn = event.target.closest("#mobileLoginBtn");
     if (mobileLoginBtn) {
-      if (state.user) {
-        $("#mobileMenu")?.classList.remove("active");
-        return;
-      }
-      showModal("login");
-      $("#mobileMenu")?.classList.remove("active");
       return;
     }
     const mobileRegisterBtn = event.target.closest("#mobileRegisterBtn");
     if (mobileRegisterBtn) {
-      if (state.user) {
-        state.user = null;
-        saveState();
-        renderChrome();
-        if (state.screen === "admin") {
-          renderHome();
-          setScreen("home");
-        }
-        $("#mobileMenu")?.classList.remove("active");
-        return;
-      }
-      showModal("register");
-      $("#mobileMenu")?.classList.remove("active");
       return;
     }
 
     // Redesigned homepage & header actions
     const loginBtn = event.target.closest("#loginBtn") || event.target.closest("#sidebarLoginBtn");
     if (loginBtn) {
-      if (state.user) return;
-      showModal("login");
       return;
     }
     const registerBtn = event.target.closest("#registerBtn") || event.target.closest("#sidebarRegisterBtn");
     if (registerBtn) {
-      if (state.user) {
-        state.user = null;
-        saveState();
-        renderChrome();
-        if (state.screen === "admin") {
-          renderHome();
-          setScreen("home");
-        }
-        return;
-      }
-      showModal("register");
       return;
     }
 
