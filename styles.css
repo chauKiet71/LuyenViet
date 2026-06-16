@@ -6294,9 +6294,7 @@ p {
 }
 
 .cta-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: none !important; /* Temporarily hide the CTA card containing Login/Register buttons */
 }
 
 .cta-info {
@@ -6411,6 +6409,87 @@ p {
   .node-info {
     max-width: calc(100% - 112px);
     padding: 10px 12px;
+  }
+}
+
+/* Responsive adjustments for mobile screens (under 650px) to prevent layout overflow */
+@media (max-width: 650px) {
+  .roadmap-panel {
+    padding: 24px 16px;
+  }
+
+  .roadmap-timeline::before {
+    left: 40px; /* 16px padding + 24px (half of 48px circle) */
+    top: 32px;
+    bottom: 32px;
+    width: 3px;
+  }
+
+  .roadmap-timeline-item {
+    grid-template-columns: 48px 1fr;
+    gap: 12px 16px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .timeline-node-col {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    margin-top: 2px;
+  }
+
+  .roadmap-node-circle {
+    width: 48px;
+    height: 48px;
+    border-width: 3px !important;
+  }
+
+  .status-active .roadmap-node-circle::after {
+    inset: -5px;
+    border-width: 1.5px;
+  }
+
+  .node-star-gold,
+  .node-star-active {
+    font-size: 18px;
+  }
+
+  .timeline-content-col {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .timeline-action-col {
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .btn-timeline-action {
+    width: 100%;
+    max-width: 180px;
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .lesson-title {
+    font-size: 16px;
+  }
+
+  .lesson-label {
+    font-size: 12px;
+  }
+
+  .day-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+
+  .progress-info {
+    font-size: 11px;
   }
 }
 
@@ -6578,9 +6657,9 @@ p {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 16px;
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
   }
 
   .mobile-nav-item {
@@ -6621,9 +6700,7 @@ p {
   }
 
   .mobile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: none !important; /* Temporarily hide mobile actions (Login/Register buttons) */
   }
 
   .mobile-actions .btn-login {
